@@ -10,6 +10,17 @@ export type OperatorKey = typeof operators[number]
 
 const isNonZero = (context: unknown, event: NumberEvent) => event.key !== '0'
 
+const storeOperand1Value = assign<CalculatorContext, CalculatorEvent>({
+  operand1Value: (context) => context.display,
+})
+const storeOperand2Value = assign<CalculatorContext, CalculatorEvent>({
+  operand2Value: (context) => context.display,
+})
+const calculateResult = assign<CalculatorContext, CalculatorEvent>({
+  display: ({ operand1Value, operator, operand2Value }) =>
+    calculate(operand1Value, operand2Value, operator).toString(),
+})
+
 type NumberEvent = { type: 'number'; key: NumberKey }
 type CalculatorEvent =
   | NumberEvent
@@ -73,10 +84,13 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
         },
         operator: {
           target: 'operator',
-          actions: assign({
-            operand1Value: (context, event) => context.display,
-            operator: (context, event) => event.key,
-          }),
+          actions: [
+            storeOperand1Value,
+            assign({
+              // operand1Value: (context, event) => context.display,
+              operator: (context, event) => event.key,
+            }),
+          ],
         },
       },
     },
@@ -98,22 +112,30 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
             display: (context, event) => `${context.display}${event.key}`,
           }),
         },
+        operator: {
+          target: 'operator',
+          actions: [
+            storeOperand2Value,
+            calculateResult,
+            storeOperand1Value,
+            assign({
+              operator: (context, event) => event.key,
+            }),
+          ],
+        },
+
         equals: {
           target: 'result',
-          actions: assign({
-            operand2Value: (context, event) => context.display,
-          }),
+          actions: [
+            assign({
+              operand2Value: (context, event) => context.display,
+            }),
+          ],
         },
       },
     },
     result: {
-      entry: [
-        assign({
-          display: ({ operand1Value, operator, operand2Value }, event) => {
-            return calculate(operand1Value, operand2Value, operator).toString()
-          },
-        }),
-      ],
+      entry: [calculateResult],
     },
   },
 })

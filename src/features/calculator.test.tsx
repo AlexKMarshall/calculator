@@ -64,3 +64,14 @@ test('no leading zeros operand2', () => {
 
   expect(screen.getByRole('status')).toHaveValue('5')
 })
+test('chained operators', () => {
+  render(<Calculator />)
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('='))
+
+  expect(screen.getByRole('status')).toHaveValue('9')
+})
