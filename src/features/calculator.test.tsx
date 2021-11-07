@@ -75,3 +75,17 @@ test('chained operators', () => {
 
   expect(screen.getByRole('status')).toHaveValue('9')
 })
+test('make second calculation', () => {
+  render(<Calculator />)
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('='))
+
+  userEvent.click(getButton('2'))
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('2'))
+  userEvent.click(getButton('='))
+
+  expect(screen.getByRole('status')).toHaveValue('4')
+})

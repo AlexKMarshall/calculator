@@ -136,6 +136,15 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
     },
     result: {
       entry: [calculateResult],
+      on: {
+        number: {
+          target: 'operand1',
+          actions: assign({
+            display: (context, event) => event.key,
+          }),
+          cond: isNonZero,
+        },
+      },
     },
   },
 })
