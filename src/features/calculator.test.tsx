@@ -10,21 +10,24 @@ const getButton = (key: Key) => screen.getByRole('button', { name: key })
 test('addition', () => {
   render(<Calculator />)
   userEvent.click(getButton('1'))
+  userEvent.click(getButton('1'))
   userEvent.click(getButton('+'))
   userEvent.click(getButton('2'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('3')
+  expect(screen.getByRole('status')).toHaveValue('13')
 })
 
 test('subtraction', () => {
   render(<Calculator />)
+  userEvent.click(getButton('1'))
   userEvent.click(getButton('8'))
   userEvent.click(getButton('-'))
-  userEvent.click(getButton('6'))
+  userEvent.click(getButton('1'))
+  userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('2')
+  expect(screen.getByRole('status')).toHaveValue('5')
 })
 test('multiplication', () => {
   render(<Calculator />)

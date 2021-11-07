@@ -62,6 +62,11 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
     },
     operand1: {
       on: {
+        number: {
+          actions: assign({
+            display: (context, event) => `${context.display}${event.key}`,
+          }),
+        },
         operator: {
           target: 'operator',
           actions: assign({
@@ -83,6 +88,11 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
     },
     operand2: {
       on: {
+        number: {
+          actions: assign({
+            display: (context, event) => `${context.display}${event.key}`,
+          }),
+        },
         equals: {
           target: 'result',
           actions: assign({
