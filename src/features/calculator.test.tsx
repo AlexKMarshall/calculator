@@ -32,11 +32,12 @@ test('subtraction', () => {
 test('multiplication', () => {
   render(<Calculator />)
   userEvent.click(getButton('2'))
+  userEvent.click(getButton('0'))
   userEvent.click(getButton('*'))
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('6')
+  expect(screen.getByRole('status')).toHaveValue('60')
 })
 test('division', () => {
   render(<Calculator />)
