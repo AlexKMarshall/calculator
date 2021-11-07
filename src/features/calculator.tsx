@@ -3,17 +3,19 @@ import { assign, createMachine } from 'xstate'
 import { useMachine } from '@xstate/react'
 
 const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
+const operators = ['+', '-', '*', '/'] as const
 
 export type NumberKey = typeof numbers[number]
+export type OperatorKey = typeof operators[number]
 
 type CalculatorEvent =
   | { type: 'number'; key: NumberKey }
-  | { type: 'operator'; key: '+' }
+  | { type: 'operator'; key: OperatorKey }
   | { type: 'equals' }
 type CalculatorContext = {
   operand1Value: string
   operand2Value: string
-  operator: '+' | null
+  operator: OperatorKey | null
   display: string
 }
 
@@ -27,6 +29,12 @@ const calculate = (
   switch (operator) {
     case '+':
       return op1 + op2
+    case '-':
+      return op1 - op2
+    case '*':
+      return op1 * op2
+    case '/':
+      return op1 / op2
     default:
       return 0
   }
@@ -97,8 +105,7 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
 
 export function Calculator(): JSX.Element {
   const [state, send] = useMachine(calculatorMachine)
-  console.log(state.value)
-  // console.log(state.context)
+
   return (
     <>
       {numbers.map((number) => (
@@ -110,12 +117,15 @@ export function Calculator(): JSX.Element {
           {number}
         </button>
       ))}
-      <button
-        type="button"
-        onClick={() => send({ type: 'operator', key: '+' })}
-      >
-        +
-      </button>
+      {operators.map((operator) => (
+        <button
+          key={operator}
+          type="button"
+          onClick={() => send({ type: 'operator', key: operator })}
+        >
+          {operator}
+        </button>
+      ))}
       <button type="button" onClick={() => send('equals')}>
         =
       </button>
