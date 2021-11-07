@@ -1,5 +1,6 @@
 import { assign, createMachine } from 'xstate'
 
+import { isContext } from 'vm'
 import { useMachine } from '@xstate/react'
 
 const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
@@ -8,7 +9,8 @@ const operators = ['+', '-', '*', '/'] as const
 export type NumberKey = typeof numbers[number]
 export type OperatorKey = typeof operators[number]
 
-const isNonZero = (context: unknown, event: NumberEvent) => event.key !== '0'
+const isNonZero = (context: CalculatorContext, event: CalculatorEvent) =>
+  event.type === 'number' && event.key !== '0'
 
 const storeOperand1Value = assign<CalculatorContext, CalculatorEvent>({
   operand1Value: (context) => context.display,
@@ -22,10 +24,8 @@ const calculateResult = assign<CalculatorContext, CalculatorEvent>({
 })
 
 type NumberEvent = { type: 'number'; key: NumberKey }
-type CalculatorEvent =
-  | NumberEvent
-  | { type: 'operator'; key: OperatorKey }
-  | { type: 'equals' }
+type OperatorEvent = { type: 'operator'; key: OperatorKey }
+type CalculatorEvent = NumberEvent | OperatorEvent | { type: 'equals' }
 type CalculatorContext = {
   operand1Value: string
   operand2Value: string
@@ -87,7 +87,6 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
           actions: [
             storeOperand1Value,
             assign({
-              // operand1Value: (context, event) => context.display,
               operator: (context, event) => event.key,
             }),
           ],
@@ -143,6 +142,15 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
             display: (context, event) => event.key,
           }),
           cond: isNonZero,
+        },
+        operator: {
+          target: 'operator',
+          actions: [
+            storeOperand1Value,
+            assign({
+              operator: (context, event) => event.key,
+            }),
+          ],
         },
       },
     },

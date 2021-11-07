@@ -89,3 +89,16 @@ test('make second calculation', () => {
 
   expect(screen.getByRole('status')).toHaveValue('4')
 })
+test('chain operator after equals', () => {
+  render(<Calculator />)
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('='))
+
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('2'))
+  userEvent.click(getButton('='))
+
+  expect(screen.getByRole('status')).toHaveValue('8')
+})
