@@ -1,3 +1,4 @@
+import { Calculator } from 'src/features/calculator'
 import Head from 'next/head'
 import type { NextPage } from 'next'
 
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>Calculator</main>
+      <Calculator />
     </>
   )
 }
