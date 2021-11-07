@@ -48,3 +48,19 @@ test('division', () => {
 
   expect(screen.getByRole('status')).toHaveValue('2')
 })
+test('no leading zeros operand1', () => {
+  render(<Calculator />)
+  userEvent.click(getButton('0'))
+  userEvent.click(getButton('3'))
+
+  expect(screen.getByRole('status')).toHaveValue('3')
+})
+test('no leading zeros operand2', () => {
+  render(<Calculator />)
+  userEvent.click(getButton('3'))
+  userEvent.click(getButton('+'))
+  userEvent.click(getButton('0'))
+  userEvent.click(getButton('5'))
+
+  expect(screen.getByRole('status')).toHaveValue('5')
+})

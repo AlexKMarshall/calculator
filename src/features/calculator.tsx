@@ -8,8 +8,11 @@ const operators = ['+', '-', '*', '/'] as const
 export type NumberKey = typeof numbers[number]
 export type OperatorKey = typeof operators[number]
 
+const isNonZero = (context: unknown, event: NumberEvent) => event.key !== '0'
+
+type NumberEvent = { type: 'number'; key: NumberKey }
 type CalculatorEvent =
-  | { type: 'number'; key: NumberKey }
+  | NumberEvent
   | { type: 'operator'; key: OperatorKey }
   | { type: 'equals' }
 type CalculatorContext = {
@@ -57,6 +60,7 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
           actions: assign({
             display: (context, event) => event.key,
           }),
+          cond: isNonZero,
         },
       },
     },
@@ -83,6 +87,7 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
           actions: assign({
             display: (context, event) => event.key,
           }),
+          cond: isNonZero,
         },
       },
     },
