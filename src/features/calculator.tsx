@@ -1,7 +1,7 @@
 import { assign, createMachine } from 'xstate'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { isContext } from 'vm'
-import { useEffect } from 'react'
 import { useMachine } from '@xstate/react'
 
 const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
@@ -158,21 +158,16 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
   },
 })
 
-export function Calculator(): JSX.Element {
-  const [state, send] = useMachine(calculatorMachine)
+function useKeyboardShortcut() {
+  const listeners = useRef(new Map<string, () => void>())
 
   useEffect(() => {
     document.body.setAttribute('tabIndex', '-1')
 
     const listener = (e: KeyboardEvent) => {
-      if (numbers.includes(e.key as typeof numbers[number])) {
-        send({ type: 'number', key: e.key as typeof numbers[number] })
-      }
-      if (operators.includes(e.key as typeof operators[number])) {
-        send({ type: 'operator', key: e.key as typeof operators[number] })
-      }
-      if (e.key === '=') {
-        send({ type: 'equals' })
+      const action = listeners.current.get(e.key)
+      if (action) {
+        action()
       }
     }
 
@@ -181,42 +176,82 @@ export function Calculator(): JSX.Element {
     return () => {
       document.body.removeEventListener('keydown', listener)
     }
-  }, [send])
+  }, [])
+
+  return useMemo(
+    () => ({
+      registerShortcut: (shortcut: string, action: () => void) => {
+        listeners.current.set(shortcut, action)
+      },
+      unregisterShortcut: (shortcut: string) => {
+        listeners.current.delete(shortcut)
+      },
+    }),
+    []
+  )
+}
+
+export function Calculator(): JSX.Element {
+  const [state, send] = useMachine(calculatorMachine)
+
+  const { registerShortcut, unregisterShortcut } = useKeyboardShortcut()
 
   return (
     <>
       <output>{state.context.display}</output>
       {numbers.map((number) => (
-        <Button
+        <ShortcutButton
+          registerShortcut={registerShortcut}
+          unregisterShortcut={unregisterShortcut}
           key={number}
           action={() => send({ type: 'number', key: number })}
           shortcut={number}
         >
           {number}
-        </Button>
+        </ShortcutButton>
       ))}
       {operators.map((operator) => (
-        <Button
+        <ShortcutButton
+          registerShortcut={registerShortcut}
+          unregisterShortcut={unregisterShortcut}
           key={operator}
           action={() => send({ type: 'operator', key: operator })}
           shortcut={operator}
         >
           {operator}
-        </Button>
+        </ShortcutButton>
       ))}
-      <Button action={() => send('equals')} shortcut="=">
+      <ShortcutButton
+        registerShortcut={registerShortcut}
+        unregisterShortcut={unregisterShortcut}
+        action={() => send('equals')}
+        shortcut="="
+      >
         =
-      </Button>
+      </ShortcutButton>
     </>
   )
 }
 
-type ButtonProps = {
-  shortcut?: string
+type ShortcutButtonProps = {
+  shortcut: string
   children: string
   action: () => void
+  registerShortcut: (shortcut: string, action: () => void) => void
+  unregisterShortcut: (shortcut: string) => void
 }
-function Button({ children, action, shortcut }: ButtonProps): JSX.Element {
+function ShortcutButton({
+  registerShortcut,
+  unregisterShortcut,
+  children,
+  action,
+  shortcut,
+}: ShortcutButtonProps): JSX.Element {
+  useEffect(() => {
+    registerShortcut(shortcut, action)
+    return () => unregisterShortcut(shortcut)
+  }, [action, registerShortcut, shortcut, unregisterShortcut])
+
   return (
     <button type="button" onClick={action}>
       {children}
