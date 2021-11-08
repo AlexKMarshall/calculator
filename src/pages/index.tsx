@@ -13,8 +13,11 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>Calculator</main>
-      <Calculator />
+      <main>
+        <h1>Calc</h1>
+
+        <Calculator />
+      </main>
     </>
   )
 }

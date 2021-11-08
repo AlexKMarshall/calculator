@@ -1,6 +1,7 @@
 import { assign, createMachine } from 'xstate'
 
 import { isContext } from 'vm'
+import { useEffect } from 'react'
 import { useMachine } from '@xstate/react'
 
 const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
@@ -160,30 +161,65 @@ const calculatorMachine = createMachine<CalculatorContext, CalculatorEvent>({
 export function Calculator(): JSX.Element {
   const [state, send] = useMachine(calculatorMachine)
 
+  useEffect(() => {
+    document.body.setAttribute('tabIndex', '-1')
+
+    const listener = (e: KeyboardEvent) => {
+      if (numbers.includes(e.key as typeof numbers[number])) {
+        send({ type: 'number', key: e.key as typeof numbers[number] })
+      }
+      if (operators.includes(e.key as typeof operators[number])) {
+        send({ type: 'operator', key: e.key as typeof operators[number] })
+      }
+      if (e.key === '=') {
+        send({ type: 'equals' })
+      }
+    }
+
+    document.body.addEventListener('keydown', listener)
+
+    return () => {
+      document.body.removeEventListener('keydown', listener)
+    }
+  }, [send])
+
   return (
     <>
+      <output>{state.context.display}</output>
       {numbers.map((number) => (
-        <button
+        <Button
           key={number}
-          type="button"
-          onClick={() => send({ type: 'number', key: number })}
+          action={() => send({ type: 'number', key: number })}
+          shortcut={number}
         >
           {number}
-        </button>
+        </Button>
       ))}
       {operators.map((operator) => (
-        <button
+        <Button
           key={operator}
-          type="button"
-          onClick={() => send({ type: 'operator', key: operator })}
+          action={() => send({ type: 'operator', key: operator })}
+          shortcut={operator}
         >
           {operator}
-        </button>
+        </Button>
       ))}
-      <button type="button" onClick={() => send('equals')}>
+      <Button action={() => send('equals')} shortcut="=">
         =
-      </button>
-      <output>{state.context.display}</output>
+      </Button>
     </>
+  )
+}
+
+type ButtonProps = {
+  shortcut?: string
+  children: string
+  action: () => void
+}
+function Button({ children, action, shortcut }: ButtonProps): JSX.Element {
+  return (
+    <button type="button" onClick={action}>
+      {children}
+    </button>
   )
 }

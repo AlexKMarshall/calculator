@@ -102,3 +102,12 @@ test('chain operator after equals', () => {
 
   expect(screen.getByRole('status')).toHaveValue('8')
 })
+test('using keyboard', () => {
+  render(<Calculator />)
+  userEvent.type(document.body, '1')
+  userEvent.type(document.body, '+')
+  userEvent.type(document.body, '3')
+  userEvent.type(document.body, '=')
+
+  expect(screen.getByRole('status')).toHaveValue('4')
+})
