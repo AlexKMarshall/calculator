@@ -1,5 +1,13 @@
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
 import { assign, createMachine } from 'xstate'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { isContext } from 'vm'
 import { useMachine } from '@xstate/react'
@@ -191,18 +199,40 @@ function useKeyboardShortcut() {
   )
 }
 
+type ShortcutContext = {
+  registerShortcut: (shortcut: string, action: () => void) => void
+  unregisterShortcut: (shortcut: string) => void
+}
+const ShortcutContext = createContext<ShortcutContext | undefined>(undefined)
+ShortcutContext.displayName = 'ShortcutContext'
+
+function ShortcutProvider({ children }: { children: ReactNode }): JSX.Element {
+  const value = useKeyboardShortcut()
+  return (
+    <ShortcutContext.Provider value={value}>
+      {children}
+    </ShortcutContext.Provider>
+  )
+}
+
+function useShortcutContext() {
+  const context = useContext(ShortcutContext)
+  if (!context) {
+    throw new Error(
+      'useShortcutContext must be used within ShortcutContext Provider'
+    )
+  }
+  return context
+}
+
 export function Calculator(): JSX.Element {
   const [state, send] = useMachine(calculatorMachine)
 
-  const { registerShortcut, unregisterShortcut } = useKeyboardShortcut()
-
   return (
-    <>
+    <ShortcutProvider>
       <output>{state.context.display}</output>
       {numbers.map((number) => (
         <ShortcutButton
-          registerShortcut={registerShortcut}
-          unregisterShortcut={unregisterShortcut}
           key={number}
           action={() => send({ type: 'number', key: number })}
           shortcut={number}
@@ -212,8 +242,6 @@ export function Calculator(): JSX.Element {
       ))}
       {operators.map((operator) => (
         <ShortcutButton
-          registerShortcut={registerShortcut}
-          unregisterShortcut={unregisterShortcut}
           key={operator}
           action={() => send({ type: 'operator', key: operator })}
           shortcut={operator}
@@ -221,36 +249,33 @@ export function Calculator(): JSX.Element {
           {operator}
         </ShortcutButton>
       ))}
-      <ShortcutButton
-        registerShortcut={registerShortcut}
-        unregisterShortcut={unregisterShortcut}
-        action={() => send('equals')}
-        shortcut="="
-      >
+      <ShortcutButton action={() => send('equals')} shortcut="=">
         =
       </ShortcutButton>
-    </>
+    </ShortcutProvider>
   )
+}
+
+function useRegisterKeyboardShortcut(shortcut: string, action: () => void) {
+  const { registerShortcut, unregisterShortcut } = useShortcutContext()
+
+  useEffect(() => {
+    registerShortcut(shortcut, action)
+    return () => unregisterShortcut(shortcut)
+  }, [action, registerShortcut, shortcut, unregisterShortcut])
 }
 
 type ShortcutButtonProps = {
   shortcut: string
   children: string
   action: () => void
-  registerShortcut: (shortcut: string, action: () => void) => void
-  unregisterShortcut: (shortcut: string) => void
 }
 function ShortcutButton({
-  registerShortcut,
-  unregisterShortcut,
   children,
   action,
   shortcut,
 }: ShortcutButtonProps): JSX.Element {
-  useEffect(() => {
-    registerShortcut(shortcut, action)
-    return () => unregisterShortcut(shortcut)
-  }, [action, registerShortcut, shortcut, unregisterShortcut])
+  useRegisterKeyboardShortcut(shortcut, action)
 
   return (
     <button type="button" onClick={action}>
