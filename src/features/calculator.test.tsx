@@ -1,6 +1,7 @@
-import { Calculator, NumberKey, OperatorKey } from './calculator'
+import { NumberKey, OperatorKey } from './calculator.machine'
 import { render, screen } from '@testing-library/react'
 
+import { Calculator } from './calculator'
 import userEvent from '@testing-library/user-event'
 
 type Key = NumberKey | OperatorKey | '='
