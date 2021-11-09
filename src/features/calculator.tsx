@@ -1,74 +1,7 @@
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react'
-
+import { ShortcutButton } from 'src/components'
+import { ShortcutProvider } from 'src/hooks/keyboard-shortcut'
 import { calculatorMachine } from './calculator.machine'
 import { useMachine } from '@xstate/react'
-
-function useKeyboardShortcut() {
-  const listeners = useRef(new Map<string, () => void>())
-
-  useEffect(() => {
-    document.body.setAttribute('tabIndex', '-1')
-
-    const listener = (e: KeyboardEvent) => {
-      const action = listeners.current.get(e.key)
-      if (action) {
-        action()
-      }
-    }
-
-    document.body.addEventListener('keydown', listener)
-
-    return () => {
-      document.body.removeEventListener('keydown', listener)
-    }
-  }, [])
-
-  return useMemo(
-    () => ({
-      registerShortcut: (shortcut: string, action: () => void) => {
-        listeners.current.set(shortcut, action)
-      },
-      unregisterShortcut: (shortcut: string) => {
-        listeners.current.delete(shortcut)
-      },
-    }),
-    []
-  )
-}
-
-type ShortcutContext = {
-  registerShortcut: (shortcut: string, action: () => void) => void
-  unregisterShortcut: (shortcut: string) => void
-}
-const ShortcutContext = createContext<ShortcutContext | undefined>(undefined)
-ShortcutContext.displayName = 'ShortcutContext'
-
-function ShortcutProvider({ children }: { children: ReactNode }): JSX.Element {
-  const value = useKeyboardShortcut()
-  return (
-    <ShortcutContext.Provider value={value}>
-      {children}
-    </ShortcutContext.Provider>
-  )
-}
-
-function useShortcutContext() {
-  const context = useContext(ShortcutContext)
-  if (!context) {
-    throw new Error(
-      'useShortcutContext must be used within ShortcutContext Provider'
-    )
-  }
-  return context
-}
 
 export function Calculator(): JSX.Element {
   const [state, send] = useMachine(calculatorMachine)
@@ -170,33 +103,5 @@ export function Calculator(): JSX.Element {
         =
       </ShortcutButton>
     </ShortcutProvider>
-  )
-}
-
-function useRegisterKeyboardShortcut(shortcut: string, action: () => void) {
-  const { registerShortcut, unregisterShortcut } = useShortcutContext()
-
-  useEffect(() => {
-    registerShortcut(shortcut, action)
-    return () => unregisterShortcut(shortcut)
-  }, [action, registerShortcut, shortcut, unregisterShortcut])
-}
-
-type ShortcutButtonProps = {
-  shortcut: string
-  children: string
-  action: () => void
-}
-function ShortcutButton({
-  children,
-  action,
-  shortcut,
-}: ShortcutButtonProps): JSX.Element {
-  useRegisterKeyboardShortcut(shortcut, action)
-
-  return (
-    <button type="button" onClick={action}>
-      {children}
-    </button>
   )
 }
