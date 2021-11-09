@@ -9,7 +9,6 @@ import {
 } from 'react'
 import { assign, createMachine } from 'xstate'
 
-import { isContext } from 'vm'
 import { useMachine } from '@xstate/react'
 
 const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
@@ -232,28 +231,25 @@ export function Calculator(): JSX.Element {
     <ShortcutProvider>
       <output>{state.context.display}</output>
       <ShortcutButton
-        action={() => send({ type: 'number', key: '0' })}
-        shortcut="0"
+        action={() => send({ type: 'number', key: '7' })}
+        shortcut="7"
       >
-        0
+        7
       </ShortcutButton>
       <ShortcutButton
-        action={() => send({ type: 'number', key: '1' })}
-        shortcut="1"
+        action={() => send({ type: 'number', key: '8' })}
+        shortcut="8"
       >
-        1
+        8
       </ShortcutButton>
       <ShortcutButton
-        action={() => send({ type: 'number', key: '2' })}
-        shortcut="2"
+        action={() => send({ type: 'number', key: '9' })}
+        shortcut="9"
       >
-        2
+        9
       </ShortcutButton>
-      <ShortcutButton
-        action={() => send({ type: 'number', key: '3' })}
-        shortcut="3"
-      >
-        3
+      <ShortcutButton action={() => {}} shortcut="Delete">
+        DEL
       </ShortcutButton>
       <ShortcutButton
         action={() => send({ type: 'number', key: '4' })}
@@ -274,34 +270,43 @@ export function Calculator(): JSX.Element {
         6
       </ShortcutButton>
       <ShortcutButton
-        action={() => send({ type: 'number', key: '7' })}
-        shortcut="7"
-      >
-        7
-      </ShortcutButton>
-      <ShortcutButton
-        action={() => send({ type: 'number', key: '8' })}
-        shortcut="8"
-      >
-        8
-      </ShortcutButton>
-      <ShortcutButton
-        action={() => send({ type: 'number', key: '9' })}
-        shortcut="9"
-      >
-        9
-      </ShortcutButton>
-      <ShortcutButton
         action={() => send({ type: 'operator', key: '+' })}
         shortcut="+"
       >
         +
       </ShortcutButton>
       <ShortcutButton
+        action={() => send({ type: 'number', key: '1' })}
+        shortcut="1"
+      >
+        1
+      </ShortcutButton>
+      <ShortcutButton
+        action={() => send({ type: 'number', key: '2' })}
+        shortcut="2"
+      >
+        2
+      </ShortcutButton>
+      <ShortcutButton
+        action={() => send({ type: 'number', key: '3' })}
+        shortcut="3"
+      >
+        3
+      </ShortcutButton>
+      <ShortcutButton
         action={() => send({ type: 'operator', key: '-' })}
         shortcut="-"
       >
         -
+      </ShortcutButton>
+      <ShortcutButton action={() => {}} shortcut=".">
+        .
+      </ShortcutButton>
+      <ShortcutButton
+        action={() => send({ type: 'number', key: '0' })}
+        shortcut="0"
+      >
+        0
       </ShortcutButton>
       <ShortcutButton
         action={() => send({ type: 'operator', key: '*' })}
