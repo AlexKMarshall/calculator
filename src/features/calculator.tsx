@@ -1,4 +1,12 @@
-import { Box, Display, Grid, ShortcutButton, Stack } from 'src/components'
+import {
+  Box,
+  Display,
+  Grid,
+  HiddenVisually,
+  ShortcutButton,
+  Stack,
+  Text,
+} from 'src/components'
 
 import { ShortcutProvider } from 'src/hooks/keyboard-shortcut'
 import { calculatorMachine } from './calculator.machine'
@@ -30,8 +38,11 @@ export function Calculator(): JSX.Element {
           >
             9
           </ShortcutButton>
-          <ShortcutButton action={() => {}} shortcut="Delete">
-            DEL
+          <ShortcutButton action={() => {}} shortcut="Delete" fontSize="s">
+            <Text transform="uppercase" aria-hidden>
+              del
+            </Text>
+            <HiddenVisually>delete</HiddenVisually>
           </ShortcutButton>
           <ShortcutButton
             action={() => send({ type: 'number', key: '4' })}
@@ -102,7 +113,19 @@ export function Calculator(): JSX.Element {
           >
             /
           </ShortcutButton>
-          <ShortcutButton action={() => send('equals')} shortcut="=">
+          <ShortcutButton
+            action={() => {}}
+            shortcut="Escape"
+            size="large"
+            fontSize="s"
+          >
+            <Text transform="uppercase">Reset</Text>
+          </ShortcutButton>
+          <ShortcutButton
+            action={() => send('equals')}
+            shortcut="="
+            size="large"
+          >
             =
           </ShortcutButton>
         </Grid>
