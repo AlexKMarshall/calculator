@@ -8,6 +8,10 @@ const base = style({
   placeItems: 'center',
   padding: themeTokens.space.s,
   lineHeight: 1,
+  border: 'none',
+  borderRadius: themeTokens.borderRadius.s,
+  borderBottomStyle: 'solid',
+  borderBottomWidth: '5px',
 })
 
 export const shortcutButton = recipe({
@@ -26,14 +30,17 @@ export const shortcutButton = recipe({
       primary: {
         backgroundColor: colorThemeTokens.button.primary,
         color: colorThemeTokens.text.button.primary,
+        borderColor: colorThemeTokens.shadow.button.primary,
       },
       secondary: {
         backgroundColor: colorThemeTokens.button.secondary,
         color: colorThemeTokens.text.button.secondary,
+        borderColor: colorThemeTokens.shadow.button.secondary,
       },
       accent: {
         backgroundColor: colorThemeTokens.button.accent,
-        color: colorThemeTokens.text.button.secondary,
+        color: colorThemeTokens.text.button.accent,
+        borderColor: colorThemeTokens.shadow.button.accent,
       },
     },
   },

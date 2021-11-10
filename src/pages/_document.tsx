@@ -6,7 +6,7 @@ import Document, {
   NextScript,
 } from 'next/document'
 
-import { lightTheme } from 'src/styles/theme.css'
+import { darkTheme } from 'src/styles/theme.css'
 
 class CustomDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -24,7 +24,7 @@ class CustomDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className={lightTheme}>
+        <body className={darkTheme}>
           <Main />
           <NextScript />
         </body>

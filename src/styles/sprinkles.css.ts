@@ -8,6 +8,7 @@ const properties = defineProperties({
     fontSize: themeTokens.fontSize,
     textTransform: ['uppercase'],
     backgroundColor: colorThemeTokens.background,
+    borderRadius: themeTokens.borderRadius,
   },
 })
 
