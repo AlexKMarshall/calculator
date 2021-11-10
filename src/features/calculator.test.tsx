@@ -1,12 +1,9 @@
-import { NumberKey, OperatorKey } from './calculator.machine'
 import { render, screen } from '@testing-library/react'
 
 import { Calculator } from './calculator'
 import userEvent from '@testing-library/user-event'
 
-type Key = NumberKey | OperatorKey | '='
-
-const getButton = (key: Key) => screen.getByRole('button', { name: key })
+const getButton = (key: string) => screen.getByRole('button', { name: key })
 
 test('addition', () => {
   render(<Calculator />)
@@ -34,7 +31,7 @@ test('multiplication', () => {
   render(<Calculator />)
   userEvent.click(getButton('2'))
   userEvent.click(getButton('0'))
-  userEvent.click(getButton('*'))
+  userEvent.click(getButton('x'))
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
