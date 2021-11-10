@@ -13,6 +13,7 @@ export const themeTokens = createGlobalTheme(':root', {
     l: '1.5rem',
     xl: '2rem',
     '2xl': '2.5rem',
+    none: '0px',
   },
   borderRadius: {
     s: '4px',

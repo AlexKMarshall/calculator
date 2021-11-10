@@ -31,7 +31,7 @@ export function ShortcutButton({
       className={styles.shortcutButton({ size, color })}
       fontSize={fontSize}
     >
-      {children}
+      <span className={styles.inner}>{children}</span>
     </Box>
   )
 }

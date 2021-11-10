@@ -956,6 +956,11 @@
     "@babel/template" "^7.12.13"
     "@vanilla-extract/integration" "^1.4.3"
 
+"@vanilla-extract/css-utils@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@vanilla-extract/css-utils/-/css-utils-0.1.1.tgz#f4f58f85347d8a841ef74c60db111ec264011860"
+  integrity sha512-9fDV8IhSfzgDd9Z+64jVcS38S2dVc6c1eOd+hgO8zPMRba6rEB8kEjg5+AQ3xPCdzl1m8olqFHnfQRNOn1OXuA==
+
 "@vanilla-extract/css@^1.6.2", "@vanilla-extract/css@^1.6.3":
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/@vanilla-extract/css/-/css-1.6.3.tgz#61c601d9806c5e7a993a18526258cf257db73b05"
