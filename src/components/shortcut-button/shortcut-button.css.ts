@@ -25,12 +25,15 @@ export const shortcutButton = recipe({
     color: {
       primary: {
         backgroundColor: colorThemeTokens.button.primary,
+        color: colorThemeTokens.text.button.primary,
       },
       secondary: {
         backgroundColor: colorThemeTokens.button.secondary,
+        color: colorThemeTokens.text.button.secondary,
       },
       accent: {
         backgroundColor: colorThemeTokens.button.accent,
+        color: colorThemeTokens.text.button.secondary,
       },
     },
   },

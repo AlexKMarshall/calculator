@@ -31,6 +31,18 @@ export const colorThemeTokens = createThemeContract({
     secondary: null,
     accent: null,
   },
+  text: {
+    neutral: {
+      dark: null,
+      light: null,
+    },
+    body: null,
+    button: {
+      primary: null,
+      secondary: null,
+      accent: null,
+    },
+  },
 })
 
 export const lightTheme = createTheme(colorThemeTokens, {
@@ -43,5 +55,17 @@ export const lightTheme = createTheme(colorThemeTokens, {
     primary: 'hsl(30 25% 89%)',
     secondary: 'hsl(225 21% 49%)',
     accent: 'hsl(6 63% 50%)',
+  },
+  text: {
+    neutral: {
+      dark: 'hsl(221 14% 31%)',
+      light: 'hsl(0 0% 100% / 0.98)',
+    },
+    body: colorThemeTokens.text.neutral.light,
+    button: {
+      primary: colorThemeTokens.text.neutral.dark,
+      secondary: colorThemeTokens.text.neutral.light,
+      accent: colorThemeTokens.text.neutral.light,
+    },
   },
 })

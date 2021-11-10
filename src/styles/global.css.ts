@@ -10,4 +10,5 @@ globalStyle('html, body', {
 globalStyle('body', {
   backgroundColor: colorThemeTokens.background.body,
   fontSize: themeTokens.fontSize.m,
+  color: colorThemeTokens.text.body,
 })
