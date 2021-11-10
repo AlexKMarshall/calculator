@@ -1,4 +1,4 @@
-import { Center, Cover } from 'src/components'
+import { Center, Cover, Text } from 'src/components'
 
 import { Calculator } from 'src/features/calculator'
 import Head from 'next/head'
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       </Head>
       <Cover>
         <Center component="main">
-          <h1>Calc</h1>
+          <Text component="h1">calc</Text>
 
           <Calculator />
         </Center>
