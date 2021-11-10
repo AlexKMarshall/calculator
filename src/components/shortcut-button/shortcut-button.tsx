@@ -10,6 +10,7 @@ type Props = {
   children: ReactNode
   action: () => void
   size?: 'small' | 'large'
+  color?: 'primary' | 'secondary' | 'accent'
   fontSize?: BoxProps['fontSize']
 }
 export function ShortcutButton({
@@ -17,6 +18,7 @@ export function ShortcutButton({
   action,
   shortcut,
   size = 'small',
+  color = 'primary',
   fontSize,
 }: Props): JSX.Element {
   useKeyboardShortcut(shortcut, action)
@@ -26,7 +28,7 @@ export function ShortcutButton({
       component="button"
       type="button"
       onClick={action}
-      className={styles.shortcutButton({ size })}
+      className={styles.shortcutButton({ size, color })}
       fontSize={fontSize}
     >
       {children}

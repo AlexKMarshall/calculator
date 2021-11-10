@@ -6,6 +6,8 @@ import Document, {
   NextScript,
 } from 'next/document'
 
+import { lightTheme } from 'src/styles/theme.css'
+
 class CustomDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx)
@@ -22,7 +24,7 @@ class CustomDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body>
+        <body className={lightTheme}>
           <Main />
           <NextScript />
         </body>

@@ -1,6 +1,7 @@
+import { colorThemeTokens, themeTokens } from 'src/styles/theme.css'
+
 import { recipe } from '@vanilla-extract/recipes'
 import { style } from '@vanilla-extract/css'
-import { themeTokens } from 'src/styles/theme.css'
 
 const base = style({
   display: 'grid',
@@ -21,6 +22,17 @@ export const shortcutButton = recipe({
         gridColumn: 'span 2',
       },
     },
+    color: {
+      primary: {
+        backgroundColor: colorThemeTokens.button.primary,
+      },
+      secondary: {
+        backgroundColor: colorThemeTokens.button.secondary,
+      },
+      accent: {
+        backgroundColor: colorThemeTokens.button.accent,
+      },
+    },
   },
-  defaultVariants: { size: 'small' },
+  defaultVariants: { size: 'small', color: 'primary' },
 })

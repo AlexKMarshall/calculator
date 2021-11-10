@@ -35,7 +35,7 @@ export function Box({
   const className = clsx(styles.box, classNameProp, sprinkleClassNames)
 
   return (
-    <Component className={className} {...props}>
+    <Component className={className} {...nativeProps}>
       {children}
     </Component>
   )

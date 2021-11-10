@@ -1,6 +1,5 @@
+import { colorThemeTokens, themeTokens } from './theme.css'
 import { createSprinkles, defineProperties } from '@vanilla-extract/sprinkles'
-
-import { themeTokens } from './theme.css'
 
 const properties = defineProperties({
   properties: {
@@ -8,6 +7,7 @@ const properties = defineProperties({
     gap: themeTokens.space,
     fontSize: themeTokens.fontSize,
     textTransform: ['uppercase'],
+    backgroundColor: colorThemeTokens.background,
   },
 })
 

@@ -1,5 +1,6 @@
+import { colorThemeTokens, themeTokens } from './theme.css'
+
 import { globalStyle } from '@vanilla-extract/css'
-import { themeTokens } from './theme.css'
 
 globalStyle('html, body', {
   fontFamily: 'Spartan, sans-serif',
@@ -7,5 +8,6 @@ globalStyle('html, body', {
 })
 
 globalStyle('body', {
+  backgroundColor: colorThemeTokens.background.body,
   fontSize: themeTokens.fontSize.m,
 })
