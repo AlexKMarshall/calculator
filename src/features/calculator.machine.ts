@@ -9,6 +9,9 @@ export type OperatorKey = typeof operators[number]
 const isNonZero = (context: CalculatorContext, event: CalculatorEvent) =>
   event.type === 'number' && event.key !== '0'
 
+const isZero = (context: CalculatorContext, event: CalculatorEvent) =>
+  event.type === 'number' && event.key === '0'
+
 const storeOperand1Value = assign<CalculatorContext, CalculatorEvent>({
   operand1Value: (context) => context.display,
 })
@@ -21,8 +24,13 @@ const calculateResult = assign<CalculatorContext, CalculatorEvent>({
 })
 
 type NumberEvent = { type: 'number'; key: NumberKey }
+type DecimalPointEvent = { type: 'decimalPoint' }
 type OperatorEvent = { type: 'operator'; key: OperatorKey }
-type CalculatorEvent = NumberEvent | OperatorEvent | { type: 'equals' }
+type CalculatorEvent =
+  | NumberEvent
+  | OperatorEvent
+  | DecimalPointEvent
+  | { type: 'equals' }
 type CalculatorContext = {
   operand1Value: string
   operand2Value: string
@@ -35,8 +43,8 @@ const calculate = (
   operand2: CalculatorContext['operand2Value'],
   operator: CalculatorContext['operator']
 ) => {
-  const op1 = parseInt(operand1)
-  const op2 = parseInt(operand2)
+  const op1 = parseFloat(operand1)
+  const op2 = parseFloat(operand2)
   switch (operator) {
     case '+':
       return op1 + op2
@@ -67,15 +75,35 @@ export const calculatorMachine = createMachine<
     start: {
       on: {
         number: {
-          target: 'operand1',
+          target: 'operand1.beforeDecimalPoint',
           actions: assign({
             display: (context, event) => event.key,
           }),
           cond: isNonZero,
         },
+        decimalPoint: {
+          target: 'operand1.afterDecimalPoint',
+          actions: assign({
+            display: (context, event) => `${context.display}.`,
+          }),
+        },
       },
     },
     operand1: {
+      initial: 'beforeDecimalPoint',
+      states: {
+        beforeDecimalPoint: {
+          on: {
+            decimalPoint: {
+              target: 'afterDecimalPoint',
+              actions: assign({
+                display: (context, event) => `${context.display}.`,
+              }),
+            },
+          },
+        },
+        afterDecimalPoint: {},
+      },
       on: {
         number: {
           actions: assign({
@@ -95,22 +123,70 @@ export const calculatorMachine = createMachine<
     },
     operator: {
       on: {
-        number: {
-          target: 'operand2',
-          actions: assign({
-            display: (context, event) => event.key,
-          }),
-          cond: isNonZero,
-        },
+        number: [
+          {
+            target: 'operand2.beforeDecimalPoint',
+            actions: assign({
+              display: (context, event) => event.key,
+            }),
+            cond: isNonZero,
+          },
+          {
+            target: 'operand2.zero',
+            actions: assign({
+              display: (context, event) => '0',
+            }),
+            cond: isZero,
+          },
+        ],
       },
     },
     operand2: {
-      on: {
-        number: {
-          actions: assign({
-            display: (context, event) => `${context.display}${event.key}`,
-          }),
+      initial: 'beforeDecimalPoint',
+      states: {
+        zero: {
+          on: {
+            number: {
+              target: 'beforeDecimalPoint',
+              actions: assign({
+                display: (context, event) => event.key,
+              }),
+              cond: isNonZero,
+            },
+            decimalPoint: {
+              target: 'afterDecimalPoint',
+              actions: assign({
+                display: (context, event) => `${context.display}.`,
+              }),
+            },
+          },
         },
+        beforeDecimalPoint: {
+          on: {
+            decimalPoint: {
+              target: 'afterDecimalPoint',
+              actions: assign({
+                display: (context, event) => `${context.display}.`,
+              }),
+            },
+            number: {
+              actions: assign({
+                display: (context, event) => `${context.display}${event.key}`,
+              }),
+            },
+          },
+        },
+        afterDecimalPoint: {
+          on: {
+            number: {
+              actions: assign({
+                display: (context, event) => `${context.display}${event.key}`,
+              }),
+            },
+          },
+        },
+      },
+      on: {
         operator: {
           target: 'operator',
           actions: [

@@ -1,21 +1,14 @@
 import * as styles from './display.css'
 
 import { Box } from '..'
-import { ReactNode } from 'react'
 
 type Props = {
-  value: number
-  formatter?: (value: number) => string
+  value: string
 }
-export function Display({
-  value,
-  formatter = (val) => val.toString(),
-}: Props): JSX.Element {
-  const formattedValue = formatter(value)
-
+export function Display({ value }: Props): JSX.Element {
   return (
     <Box component="output" className={styles.display}>
-      {formattedValue}
+      {value}
     </Box>
   )
 }

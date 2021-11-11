@@ -12,18 +12,28 @@ import { ShortcutProvider } from 'src/hooks/keyboard-shortcut'
 import { calculatorMachine } from './calculator.machine'
 import { useMachine } from '@xstate/react'
 
-const displayFormatter = new Intl.NumberFormat().format
+const displayFormatter = new Intl.NumberFormat()
+const [, localeDecimal] = displayFormatter.formatToParts(1.2)
+
+function formatDisplayValue(value: string) {
+  const endsWithDecimalPoint = value.endsWith('.')
+  const [leftOfDecimalPoint, fractionIncTrailingZeros] = value.split('.')
+  const formattedInteger = displayFormatter.format(parseInt(leftOfDecimalPoint))
+  return [
+    formattedInteger,
+    endsWithDecimalPoint || fractionIncTrailingZeros ? localeDecimal.value : '',
+    fractionIncTrailingZeros,
+  ].join('')
+}
 
 export function Calculator(): JSX.Element {
   const [state, send] = useMachine(calculatorMachine)
+  const formattedDisplayValue = formatDisplayValue(state.context.display)
 
   return (
     <ShortcutProvider>
       <Stack space="l">
-        <Display
-          value={parseFloat(state.context.display)}
-          formatter={displayFormatter}
-        />
+        <Display value={formattedDisplayValue} />
         <Box padding="l" backgroundColor="keypad" borderRadius="m">
           <Grid gutter="xs">
             <ShortcutButton
@@ -103,7 +113,14 @@ export function Calculator(): JSX.Element {
             >
               -
             </ShortcutButton>
-            <ShortcutButton action={() => {}} shortcut=".">
+            <ShortcutButton
+              action={() =>
+                send({
+                  type: 'decimalPoint',
+                })
+              }
+              shortcut="."
+            >
               .
             </ShortcutButton>
             <ShortcutButton
