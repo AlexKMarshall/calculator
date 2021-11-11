@@ -12,13 +12,18 @@ import { ShortcutProvider } from 'src/hooks/keyboard-shortcut'
 import { calculatorMachine } from './calculator.machine'
 import { useMachine } from '@xstate/react'
 
+const displayFormatter = new Intl.NumberFormat().format
+
 export function Calculator(): JSX.Element {
   const [state, send] = useMachine(calculatorMachine)
 
   return (
     <ShortcutProvider>
       <Stack space="l">
-        <Display>{state.context.display}</Display>
+        <Display
+          value={parseFloat(state.context.display)}
+          formatter={displayFormatter}
+        />
         <Box padding="l" backgroundColor="keypad" borderRadius="m">
           <Grid gutter="xs">
             <ShortcutButton

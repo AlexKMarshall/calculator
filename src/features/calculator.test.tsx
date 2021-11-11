@@ -5,6 +5,10 @@ import userEvent from '@testing-library/user-event'
 
 const getButton = (key: string) => screen.getByRole('button', { name: key })
 
+const formatter = new Intl.NumberFormat().format
+const validateResult = (result: number) =>
+  expect(screen.getByRole('status')).toHaveValue(formatter(result))
+
 test('addition', () => {
   render(<Calculator />)
   userEvent.click(getButton('1'))
@@ -13,7 +17,7 @@ test('addition', () => {
   userEvent.click(getButton('2'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('13')
+  validateResult(13)
 })
 
 test('subtraction', () => {
@@ -25,7 +29,7 @@ test('subtraction', () => {
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('5')
+  validateResult(5)
 })
 test('multiplication', () => {
   render(<Calculator />)
@@ -35,7 +39,7 @@ test('multiplication', () => {
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('60')
+  validateResult(60)
 })
 test('division', () => {
   render(<Calculator />)
@@ -44,14 +48,14 @@ test('division', () => {
   userEvent.click(getButton('4'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('2')
+  validateResult(2)
 })
 test('no leading zeros operand1', () => {
   render(<Calculator />)
   userEvent.click(getButton('0'))
   userEvent.click(getButton('3'))
 
-  expect(screen.getByRole('status')).toHaveValue('3')
+  validateResult(3)
 })
 test('no leading zeros operand2', () => {
   render(<Calculator />)
@@ -60,7 +64,7 @@ test('no leading zeros operand2', () => {
   userEvent.click(getButton('0'))
   userEvent.click(getButton('5'))
 
-  expect(screen.getByRole('status')).toHaveValue('5')
+  validateResult(5)
 })
 test('chained operators', () => {
   render(<Calculator />)
@@ -71,7 +75,7 @@ test('chained operators', () => {
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('9')
+  validateResult(9)
 })
 test('make second calculation', () => {
   render(<Calculator />)
@@ -85,7 +89,7 @@ test('make second calculation', () => {
   userEvent.click(getButton('2'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('4')
+  validateResult(4)
 })
 test('chain operator after equals', () => {
   render(<Calculator />)
@@ -98,7 +102,7 @@ test('chain operator after equals', () => {
   userEvent.click(getButton('2'))
   userEvent.click(getButton('='))
 
-  expect(screen.getByRole('status')).toHaveValue('8')
+  validateResult(8)
 })
 test('using keyboard', () => {
   render(<Calculator />)
@@ -107,5 +111,11 @@ test('using keyboard', () => {
   userEvent.type(document.body, '3')
   userEvent.type(document.body, '=')
 
-  expect(screen.getByRole('status')).toHaveValue('4')
+  validateResult(4)
+})
+test('large numbers', () => {
+  render(<Calculator />)
+  userEvent.type(document.body, '123456789')
+
+  validateResult(123456789)
 })
