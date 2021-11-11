@@ -26,10 +26,12 @@ const calculateResult = assign<CalculatorContext, CalculatorEvent>({
 type NumberEvent = { type: 'number'; key: NumberKey }
 type DecimalPointEvent = { type: 'decimalPoint' }
 type OperatorEvent = { type: 'operator'; key: OperatorKey }
+type ResetEvent = { type: 'reset' }
 type CalculatorEvent =
   | NumberEvent
   | OperatorEvent
   | DecimalPointEvent
+  | ResetEvent
   | { type: 'equals' }
 type CalculatorContext = {
   operand1Value: string
@@ -59,17 +61,25 @@ const calculate = (
   }
 }
 
+const initialContext: CalculatorContext = {
+  operand1Value: '',
+  operator: null,
+  operand2Value: '',
+  display: '0',
+}
+
 export const calculatorMachine = createMachine<
   CalculatorContext,
   CalculatorEvent
 >({
   id: 'calculator',
   initial: 'start',
-  context: {
-    operand1Value: '',
-    operator: null,
-    operand2Value: '',
-    display: '0',
+  context: initialContext,
+  on: {
+    reset: {
+      target: 'start',
+      actions: assign(initialContext),
+    },
   },
   states: {
     start: {

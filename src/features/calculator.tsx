@@ -142,7 +142,7 @@ export function Calculator(): JSX.Element {
               /
             </ShortcutButton>
             <ShortcutButton
-              action={() => {}}
+              action={() => send({ type: 'reset' })}
               shortcut="Escape"
               size="large"
               fontSize="s"

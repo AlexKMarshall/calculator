@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event'
 
 const getButton = (key: string) => screen.getByRole('button', { name: key })
 
-const formatter = (val: number) => val.toString()
 const validateResult = (result: string) =>
   expect(screen.getByRole('status')).toHaveValue(result)
 
@@ -166,4 +165,14 @@ describe('decimals', () => {
     userEvent.type(document.body, '5')
     validateResult('0.105')
   })
+})
+test('reset', () => {
+  render(<Calculator />)
+  userEvent.type(document.body, '10')
+  userEvent.type(document.body, '-')
+  userEvent.type(document.body, '2')
+
+  userEvent.click(screen.getByRole('button', { name: /reset/i }))
+
+  validateResult('0')
 })
