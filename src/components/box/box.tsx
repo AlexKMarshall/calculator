@@ -1,6 +1,6 @@
 import * as styles from './box.css'
 
-import { AllHTMLAttributes, ElementType, ReactNode } from 'react'
+import { AllHTMLAttributes, ElementType, ForwardedRef, ReactNode } from 'react'
 import clsx, { ClassValue } from 'clsx'
 
 import { sprinkles } from 'src/styles/sprinkles.css'

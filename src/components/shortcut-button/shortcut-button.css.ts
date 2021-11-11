@@ -27,8 +27,9 @@ const base = style({
   color: colorVars.color,
   borderColor: colorVars.borderColor,
   overflow: 'hidden',
-  transitionDuration: '200ms',
+  transitionDuration: '150ms',
   transitionProperty: 'filter',
+  outlineOffset: '2px',
 
   vars: {
     [shadowWidth]: '5px',
@@ -38,8 +39,10 @@ const base = style({
     filter: 'brightness(1.2)',
   },
 
-  ':active': {
-    filter: 'brightness(0.8)',
+  selectors: {
+    '&:active, &.active': {
+      filter: 'brightness(0.7)',
+    },
   },
 
   ':before': {
@@ -62,11 +65,12 @@ export const inner = style({
   lineHeight: 1,
   backgroundColor: colorVars.backgroundColor,
   borderRadius: themeTokens.borderRadius.s,
-  transitionDuration: '100ms',
+  transitionDuration: '150ms',
   transitionProperty: 'transform',
 
   selectors: {
-    [`${base}:active &`]: {
+    [`${base}:active &, ${base}.active &`]: {
+      // .active is the class added when keyboard shortcut presses button
       transform: 'translateY(2px)',
     },
   },

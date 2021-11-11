@@ -7,4 +7,5 @@ export const display = style({
   lineHeight: 1,
   textAlign: 'right',
   backgroundColor: colorThemeTokens.background.display,
+  borderRadius: themeTokens.borderRadius.m,
 })

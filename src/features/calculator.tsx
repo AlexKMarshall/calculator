@@ -19,7 +19,7 @@ export function Calculator(): JSX.Element {
     <ShortcutProvider>
       <Stack space="l">
         <Display>{state.context.display}</Display>
-        <Box padding="l" backgroundColor="keypad">
+        <Box padding="l" backgroundColor="keypad" borderRadius="m">
           <Grid gutter="xs">
             <ShortcutButton
               action={() => send({ type: 'number', key: '7' })}
