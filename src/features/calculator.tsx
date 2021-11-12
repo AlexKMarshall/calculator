@@ -56,7 +56,7 @@ export function Calculator(): JSX.Element {
             </ShortcutButton>
             <ShortcutButton
               action={() => send({ type: 'delete' })}
-              shortcut="Delete"
+              shortcut={['Delete', 'Backspace']}
               fontSize="s"
               color="secondary"
             >
@@ -152,7 +152,7 @@ export function Calculator(): JSX.Element {
             </ShortcutButton>
             <ShortcutButton
               action={() => send('equals')}
-              shortcut="="
+              shortcut={['=', 'Enter']}
               size="large"
               color="accent"
             >

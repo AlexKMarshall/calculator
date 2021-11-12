@@ -218,3 +218,16 @@ test('delete', () => {
   userEvent.click(deleteButton)
   validateDisplay('0')
 })
+test('negative numbers', () => {
+  render(<Calculator />)
+  userEvent.type(document.body, '-')
+  userEvent.type(document.body, '2')
+  userEvent.type(document.body, '=')
+  validateDisplay('-2')
+})
+test('allow return as equals key', () => {
+  render(<Calculator />)
+  userEvent.type(document.body, '1+2')
+  userEvent.type(document.body, '{enter}')
+  validateDisplay('3')
+})

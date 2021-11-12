@@ -6,7 +6,7 @@ import { ReactNode, useCallback, useState } from 'react'
 import { useKeyboardShortcut } from 'src/hooks/keyboard-shortcut'
 
 type Props = {
-  shortcut: string
+  shortcut: string | string[]
   children: ReactNode
   action: () => void
   size?: 'small' | 'large'

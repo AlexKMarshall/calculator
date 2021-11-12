@@ -101,6 +101,14 @@ export const calculatorMachine = createMachine<
             display: (context, event) => `${context.display}.`,
           }),
         },
+        operator: {
+          target: 'operator',
+          cond: (context, event) => event.key === '-',
+          actions: [
+            storeOperand1Value,
+            assign({ operator: (context, event) => event.key }),
+          ],
+        },
       },
     },
     operand1: {

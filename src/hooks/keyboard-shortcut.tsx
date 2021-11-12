@@ -8,8 +8,8 @@ import {
 } from 'react'
 
 type ShortcutContext = {
-  registerShortcut: (shortcut: string, action: () => void) => void
-  unregisterShortcut: (shortcut: string) => void
+  registerShortcut: (shortcut: string | string[], action: () => void) => void
+  unregisterShortcut: (shortcut: string | string[]) => void
 }
 const ShortcutContext = createContext<ShortcutContext | undefined>(undefined)
 ShortcutContext.displayName = 'ShortcutContext'
@@ -40,11 +40,21 @@ export function ShortcutProvider({
 
   const contextValue = useMemo(
     () => ({
-      registerShortcut: (shortcut: string, action: () => void) => {
-        listeners.current.set(shortcut, action)
+      registerShortcut: (shortcuts: string | string[], action: () => void) => {
+        const providedShortcuts = Array.isArray(shortcuts)
+          ? shortcuts
+          : [shortcuts]
+        providedShortcuts.forEach((shortcut) => {
+          listeners.current.set(shortcut, action)
+        })
       },
-      unregisterShortcut: (shortcut: string) => {
-        listeners.current.delete(shortcut)
+      unregisterShortcut: (shortcuts: string | string[]) => {
+        const providedShortcuts = Array.isArray(shortcuts)
+          ? shortcuts
+          : [shortcuts]
+        providedShortcuts.forEach((shortcut) => {
+          listeners.current.delete(shortcut)
+        })
       },
     }),
     []
@@ -67,7 +77,10 @@ function useShortcutContext() {
   return context
 }
 
-export function useKeyboardShortcut(shortcut: string, action: () => void) {
+export function useKeyboardShortcut(
+  shortcut: string | string[],
+  action: () => void
+) {
   const { registerShortcut, unregisterShortcut } = useShortcutContext()
 
   useEffect(() => {
