@@ -63,7 +63,7 @@ export function Calculator(): JSX.Element {
               <Text transform="uppercase" aria-hidden>
                 del
               </Text>
-              <HiddenVisually>delete</HiddenVisually>
+              <HiddenVisually>Delete</HiddenVisually>
             </ShortcutButton>
             <ShortcutButton
               action={() => send({ type: 'number', key: '4' })}
