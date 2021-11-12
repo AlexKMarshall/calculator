@@ -22,17 +22,21 @@ const calculateResult = assign<CalculatorContext, CalculatorEvent>({
   display: ({ operand1Value, operator, operand2Value }) =>
     calculate(operand1Value, operand2Value, operator).toString(),
 })
+const displayZero = assign<CalculatorContext, CalculatorEvent>({ display: '0' })
 
 type NumberEvent = { type: 'number'; key: NumberKey }
 type DecimalPointEvent = { type: 'decimalPoint' }
 type OperatorEvent = { type: 'operator'; key: OperatorKey }
 type ResetEvent = { type: 'reset' }
+type DeleteEvent = { type: 'delete' }
+type EqualsEvent = { type: 'equals' }
 type CalculatorEvent =
   | NumberEvent
   | OperatorEvent
   | DecimalPointEvent
   | ResetEvent
-  | { type: 'equals' }
+  | DeleteEvent
+  | EqualsEvent
 type CalculatorContext = {
   operand1Value: string
   operand2Value: string
@@ -102,6 +106,9 @@ export const calculatorMachine = createMachine<
     operand1: {
       initial: 'beforeDecimalPoint',
       states: {
+        zero: {
+          entry: [displayZero],
+        },
         beforeDecimalPoint: {
           on: {
             decimalPoint: {
@@ -110,9 +117,40 @@ export const calculatorMachine = createMachine<
                 display: (context, event) => `${context.display}.`,
               }),
             },
+            delete: [
+              {
+                target: 'zero',
+                cond: (context) => context.display.length === 1,
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+              {
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+            ],
           },
         },
-        afterDecimalPoint: {},
+        afterDecimalPoint: {
+          on: {
+            delete: [
+              {
+                target: 'beforeDecimalPoint',
+                cond: (context) => context.display.endsWith('.'),
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+              {
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+            ],
+          },
+        },
       },
       on: {
         number: {
@@ -155,6 +193,7 @@ export const calculatorMachine = createMachine<
       initial: 'beforeDecimalPoint',
       states: {
         zero: {
+          entry: [displayZero],
           on: {
             number: {
               target: 'beforeDecimalPoint',
@@ -184,6 +223,20 @@ export const calculatorMachine = createMachine<
                 display: (context, event) => `${context.display}${event.key}`,
               }),
             },
+            delete: [
+              {
+                target: 'zero',
+                cond: (context) => context.display.length === 1,
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+              {
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+            ],
           },
         },
         afterDecimalPoint: {
@@ -193,6 +246,20 @@ export const calculatorMachine = createMachine<
                 display: (context, event) => `${context.display}${event.key}`,
               }),
             },
+            delete: [
+              {
+                target: 'beforeDecimalPoint',
+                cond: (context) => context.display.endsWith('.'),
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+              {
+                actions: assign({
+                  display: (context) => context.display.slice(0, -1),
+                }),
+              },
+            ],
           },
         },
       },

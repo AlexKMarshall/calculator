@@ -55,7 +55,7 @@ export function Calculator(): JSX.Element {
               9
             </ShortcutButton>
             <ShortcutButton
-              action={() => {}}
+              action={() => send({ type: 'delete' })}
               shortcut="Delete"
               fontSize="s"
               color="secondary"
