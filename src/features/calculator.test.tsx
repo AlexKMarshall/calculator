@@ -4,16 +4,31 @@ import { Calculator } from './calculator'
 import userEvent from '@testing-library/user-event'
 
 const getButton = (key: string) => screen.getByRole('button', { name: key })
+type Number = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+function triggerNumber(number: Number, mode?: 'keyboard' | 'mouse') {
+  const selectedMode = mode ?? Math.random() > 0.5 ? 'keyboard' : 'mouse'
+
+  switch (selectedMode) {
+    case 'keyboard':
+      return userEvent.type(document.body, number.toString())
+    case 'mouse':
+      return userEvent.click(
+        screen.getByRole('button', { name: number.toString() })
+      )
+  }
+}
 
 const validateDisplay = (result: string) =>
   expect(screen.getByRole('status')).toHaveValue(result)
 
 test('addition', () => {
   render(<Calculator />)
-  userEvent.click(getButton('1'))
-  userEvent.click(getButton('1'))
+  triggerNumber(1)
+  triggerNumber(1)
+
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('2'))
+  triggerNumber(2)
   userEvent.click(getButton('='))
 
   validateDisplay('13')
@@ -21,93 +36,93 @@ test('addition', () => {
 
 test('subtraction', () => {
   render(<Calculator />)
-  userEvent.click(getButton('1'))
-  userEvent.click(getButton('8'))
+  triggerNumber(1)
+  triggerNumber(8)
   userEvent.click(getButton('Minus'))
-  userEvent.click(getButton('1'))
-  userEvent.click(getButton('3'))
+  triggerNumber(1)
+  triggerNumber(3)
   userEvent.click(getButton('='))
 
   validateDisplay('5')
 })
 test('multiplication', () => {
   render(<Calculator />)
-  userEvent.click(getButton('2'))
-  userEvent.click(getButton('0'))
+  triggerNumber(2)
+  triggerNumber(0)
   userEvent.click(getButton('Multiply'))
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('='))
 
   validateDisplay('60')
 })
 test('division', () => {
   render(<Calculator />)
-  userEvent.click(getButton('8'))
+  triggerNumber(8)
   userEvent.click(getButton('Divide'))
-  userEvent.click(getButton('4'))
+  triggerNumber(4)
   userEvent.click(getButton('='))
 
   validateDisplay('2')
 })
 test('no leading zeros operand1', () => {
   render(<Calculator />)
-  userEvent.click(getButton('0'))
-  userEvent.click(getButton('3'))
+  triggerNumber(0)
+  triggerNumber(3)
 
   validateDisplay('3')
 })
 test('no leading zeros operand2', () => {
   render(<Calculator />)
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('0'))
-  userEvent.click(getButton('5'))
+  triggerNumber(0)
+  triggerNumber(5)
 
   validateDisplay('5')
 })
 test('chained operators', () => {
   render(<Calculator />)
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('='))
 
   validateDisplay('9')
 })
 test('make second calculation', () => {
   render(<Calculator />)
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('='))
 
-  userEvent.click(getButton('2'))
+  triggerNumber(2)
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('2'))
+  triggerNumber(2)
   userEvent.click(getButton('='))
 
   validateDisplay('4')
 })
 test('chain operator after equals', () => {
   render(<Calculator />)
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('3'))
+  triggerNumber(3)
   userEvent.click(getButton('='))
 
   userEvent.click(getButton('+'))
-  userEvent.click(getButton('2'))
+  triggerNumber(2)
   userEvent.click(getButton('='))
 
   validateDisplay('8')
 })
 test('using keyboard', () => {
   render(<Calculator />)
-  userEvent.type(document.body, '1')
+  triggerNumber(1, 'keyboard')
   userEvent.type(document.body, '+')
-  userEvent.type(document.body, '3')
+  triggerNumber(3, 'keyboard')
   userEvent.type(document.body, '=')
 
   validateDisplay('4')
@@ -120,10 +135,13 @@ test('large numbers', () => {
 })
 test('numbers with zeros in', () => {
   render(<Calculator />)
-  userEvent.type(document.body, '20')
+  triggerNumber(2)
+  triggerNumber(0)
   validateDisplay('20')
   userEvent.type(document.body, '+')
-  userEvent.type(document.body, '400')
+  triggerNumber(4)
+  triggerNumber(0)
+  triggerNumber(0)
   validateDisplay('400')
   userEvent.type(document.body, '=')
   validateDisplay('420')
@@ -131,46 +149,59 @@ test('numbers with zeros in', () => {
 describe('decimals', () => {
   test('operand 1, decimal greater than 1', () => {
     render(<Calculator />)
-    userEvent.type(document.body, '1.3')
+    triggerNumber(1)
+    userEvent.type(document.body, '.')
+    triggerNumber(3)
 
     validateDisplay('1.3')
   })
   test('operand 1, decimal less than 1', () => {
     render(<Calculator />)
-    userEvent.type(document.body, '0.4')
+    triggerNumber(0)
+    userEvent.type(document.body, '.')
+    triggerNumber(4)
     validateDisplay('0.4')
   })
   test('operand 2, decimal greater than 1', () => {
     render(<Calculator />)
-    userEvent.type(document.body, '1')
+    triggerNumber(1)
     userEvent.type(document.body, '+')
-    userEvent.type(document.body, '2.5')
+    triggerNumber(2)
+    userEvent.type(document.body, '.')
+    triggerNumber(5)
     validateDisplay('2.5')
     userEvent.type(document.body, '=')
     validateDisplay('3.5')
   })
   test('operand 2, decimal less than 1', () => {
     render(<Calculator />)
-    userEvent.type(document.body, '1')
+    triggerNumber(1)
     userEvent.type(document.body, '+')
-    userEvent.type(document.body, '0.5')
+    triggerNumber(0)
+    userEvent.type(document.body, '.')
+    triggerNumber(5)
     validateDisplay('0.5')
     userEvent.type(document.body, '=')
     validateDisplay('1.5')
   })
   test('decimals with zeroes in', () => {
     render(<Calculator />)
-    userEvent.type(document.body, '0.10')
-    expect(screen.getByRole('status')).toHaveValue('0.10')
-    userEvent.type(document.body, '5')
+    triggerNumber(0)
+    userEvent.type(document.body, '.')
+    triggerNumber(1)
+    triggerNumber(0)
+    validateDisplay('0.10')
+
+    triggerNumber(5)
     validateDisplay('0.105')
   })
 })
 test('reset', () => {
   render(<Calculator />)
-  userEvent.type(document.body, '10')
+  triggerNumber(1)
+  triggerNumber(0)
   userEvent.type(document.body, '-')
-  userEvent.type(document.body, '2')
+  triggerNumber(2)
 
   userEvent.click(screen.getByRole('button', { name: /reset/i }))
 
@@ -221,13 +252,15 @@ test('delete', () => {
 test('negative numbers', () => {
   render(<Calculator />)
   userEvent.type(document.body, '-')
-  userEvent.type(document.body, '2')
+  triggerNumber(2)
   userEvent.type(document.body, '=')
   validateDisplay('-2')
 })
 test('allow return as equals key', () => {
   render(<Calculator />)
-  userEvent.type(document.body, '1+2')
+  triggerNumber(1)
+  userEvent.type(document.body, '+')
+  triggerNumber(2)
   userEvent.type(document.body, '{enter}')
   validateDisplay('3')
 })
