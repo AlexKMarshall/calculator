@@ -8,4 +8,5 @@ export const display = style({
   textAlign: 'right',
   backgroundColor: colorThemeTokens.background.display,
   borderRadius: themeTokens.borderRadius.m,
+  overflowX: 'auto',
 })
