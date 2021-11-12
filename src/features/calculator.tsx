@@ -32,7 +32,7 @@ export function Calculator(): JSX.Element {
 
   return (
     <ShortcutProvider>
-      <Stack space="l">
+      <Stack space="l" component="main">
         <Display
           value={formattedDisplayValue}
           space={{ all: 'm', small: 'l', medium: 'xl' }}

@@ -94,6 +94,69 @@ export const darkTheme = createTheme(colorThemeTokens, {
   },
 })
 
+export const lightTheme = createTheme(colorThemeTokens, {
+  background: {
+    body: 'hsl(0 0% 90%)',
+    display: 'hsl(0 0% 93%)',
+    keypad: 'hsl(0 5% 81%)',
+  },
+  button: {
+    primary: 'hsl(45 7% 89%)',
+    secondary: 'hsl(185 42% 37%)',
+    accent: 'hsl(25 98% 40%)',
+  },
+  shadow: {
+    button: {
+      primary: 'hsl(35 11% 61%)',
+      secondary: 'hsl(185 58% 25%)',
+      accent: 'hsl(25 99% 27%)',
+    },
+  },
+  text: {
+    neutral: {
+      dark: 'hsl(60 10% 19%)',
+      light: 'hsl(0 0% 100% / 0.98)',
+    },
+    body: colorThemeTokens.text.neutral.dark,
+    button: {
+      primary: colorThemeTokens.text.neutral.dark,
+      secondary: colorThemeTokens.text.neutral.light,
+      accent: colorThemeTokens.text.neutral.light,
+    },
+  },
+})
+
+export const highContrastTheme = createTheme(colorThemeTokens, {
+  background: {
+    body: 'hsl(268 75% 9%)',
+    display: 'hsl(268 71% 12%)',
+    keypad: 'hsl(268 71% 12%)',
+  },
+  button: {
+    primary: 'hsl(268 47% 21%)',
+    secondary: 'hsl(281 89% 26%)',
+    accent: 'hsl(176 100% 44%)',
+  },
+  shadow: {
+    button: {
+      primary: 'hsl(290 70% 36%)',
+      secondary: 'hsl(285 91% 52%)',
+      accent: 'hsl(177 92% 70%)',
+    },
+  },
+  text: {
+    neutral: {
+      dark: 'hsl(198 20% 13%)',
+      light: 'hsl(0 0% 100% / 0.98)',
+    },
+    body: 'hsl(52 100% 62%)',
+    button: {
+      primary: colorThemeTokens.text.body,
+      secondary: colorThemeTokens.text.neutral.light,
+      accent: colorThemeTokens.text.neutral.dark,
+    },
+  },
+})
 export const screenSizes = {
   s: 375,
   m: 768,

@@ -6,11 +6,16 @@ import { ReactNode } from 'react'
 
 type Props = {
   children: ReactNode
-  space: BoxProps['gap']
+  space?: BoxProps['gap']
+  component?: BoxProps['component']
 }
-export function Stack({ children, space = 's' }: Props): JSX.Element {
+export function Stack({
+  children,
+  space = 's',
+  component,
+}: Props): JSX.Element {
   return (
-    <Box gap={space} className={styles.stack}>
+    <Box gap={space} className={styles.stack} component={component}>
       {children}
     </Box>
   )
