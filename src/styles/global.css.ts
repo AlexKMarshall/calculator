@@ -1,4 +1,4 @@
-import { colorThemeTokens, themeTokens } from './theme.css'
+import { colorThemeTokens, resolveScreenMQ, themeTokens } from './theme.css'
 
 import { globalStyle } from '@vanilla-extract/css'
 
@@ -9,6 +9,12 @@ globalStyle('html, body', {
 
 globalStyle('body', {
   backgroundColor: colorThemeTokens.background.body,
-  fontSize: themeTokens.fontSize.m,
+  fontSize: themeTokens.fontSize.s,
   color: colorThemeTokens.text.body,
+
+  '@media': {
+    [resolveScreenMQ.s]: {
+      fontSize: themeTokens.fontSize.m,
+    },
+  },
 })

@@ -33,9 +33,16 @@ export function Calculator(): JSX.Element {
   return (
     <ShortcutProvider>
       <Stack space="l">
-        <Display value={formattedDisplayValue} />
-        <Box padding="l" backgroundColor="keypad" borderRadius="m">
-          <Grid gutter="xs">
+        <Display
+          value={formattedDisplayValue}
+          space={{ all: 'm', small: 'l', medium: 'xl' }}
+        />
+        <Box
+          padding={{ all: 'm', small: 'l', medium: 'xl' }}
+          backgroundColor="keypad"
+          borderRadius="m"
+        >
+          <Grid gutter={{ all: '2xs', small: 'xs', medium: 's' }}>
             <ShortcutButton
               action={() => send({ type: 'number', key: '7' })}
               shortcut="7"
@@ -60,7 +67,11 @@ export function Calculator(): JSX.Element {
               fontSize="s"
               color="secondary"
             >
-              <Text transform="uppercase" aria-hidden>
+              <Text
+                transform="uppercase"
+                aria-hidden
+                size={{ all: 'xs', small: 's' }}
+              >
                 del
               </Text>
               <HiddenVisually>Delete</HiddenVisually>

@@ -7,6 +7,7 @@ import {
 
 export const themeTokens = createGlobalTheme(':root', {
   space: {
+    '2xs': '0.5rem',
     xs: '0.75rem',
     s: '1rem',
     m: '1.25rem',
@@ -23,6 +24,7 @@ export const themeTokens = createGlobalTheme(':root', {
     circle: '50%',
   },
   fontSize: {
+    xs: '0.75rem',
     s: '1rem',
     m: '2rem',
   },
@@ -91,3 +93,13 @@ export const darkTheme = createTheme(colorThemeTokens, {
     },
   },
 })
+
+export const screenSizes = {
+  s: 375,
+  m: 768,
+}
+
+export const resolveScreenMQ = {
+  s: `screen and (min-width: ${screenSizes.s}px)`,
+  m: `screen and (min-width: ${screenSizes.m}px)`,
+}

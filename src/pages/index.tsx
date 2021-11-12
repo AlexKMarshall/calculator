@@ -18,7 +18,9 @@ const Home: NextPage = () => {
       <Cover>
         <Center component="main">
           <Stack space="2xl">
-            <Text component="h1">calc</Text>
+            <Text component="h1" size="m">
+              calc
+            </Text>
 
             <Calculator />
           </Stack>

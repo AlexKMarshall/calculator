@@ -1,13 +1,14 @@
 import * as styles from './display.css'
 
-import { Box } from '..'
+import { Box, BoxProps } from '..'
 
 type Props = {
   value: string
+  space?: BoxProps['padding']
 }
-export function Display({ value }: Props): JSX.Element {
+export function Display({ value, space: padding }: Props): JSX.Element {
   return (
-    <Box component="output" className={styles.display}>
+    <Box component="output" className={styles.display} padding={padding}>
       {value}
     </Box>
   )
