@@ -111,7 +111,8 @@ export function Calculator(): JSX.Element {
               action={() => send({ type: 'operator', key: '-' })}
               shortcut="-"
             >
-              -
+              <span aria-hidden>-</span>
+              <HiddenVisually>Minus</HiddenVisually>
             </ShortcutButton>
             <ShortcutButton
               action={() =>
@@ -121,7 +122,8 @@ export function Calculator(): JSX.Element {
               }
               shortcut="."
             >
-              .
+              <span aria-hidden>&sdot;</span>
+              <HiddenVisually>Decimal Point</HiddenVisually>
             </ShortcutButton>
             <ShortcutButton
               action={() => send({ type: 'number', key: '0' })}
@@ -131,15 +133,17 @@ export function Calculator(): JSX.Element {
             </ShortcutButton>
             <ShortcutButton
               action={() => send({ type: 'operator', key: '*' })}
-              shortcut="*"
+              shortcut={['*', 'x']}
             >
-              x
+              <span aria-hidden>&times;</span>
+              <HiddenVisually>Multiply</HiddenVisually>
             </ShortcutButton>
             <ShortcutButton
               action={() => send({ type: 'operator', key: '/' })}
               shortcut="/"
             >
-              /
+              <span aria-hidden>&divide;</span>
+              <HiddenVisually>Divide</HiddenVisually>
             </ShortcutButton>
             <ShortcutButton
               action={() => send({ type: 'reset' })}

@@ -23,7 +23,7 @@ test('subtraction', () => {
   render(<Calculator />)
   userEvent.click(getButton('1'))
   userEvent.click(getButton('8'))
-  userEvent.click(getButton('-'))
+  userEvent.click(getButton('Minus'))
   userEvent.click(getButton('1'))
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
@@ -34,7 +34,7 @@ test('multiplication', () => {
   render(<Calculator />)
   userEvent.click(getButton('2'))
   userEvent.click(getButton('0'))
-  userEvent.click(getButton('x'))
+  userEvent.click(getButton('Multiply'))
   userEvent.click(getButton('3'))
   userEvent.click(getButton('='))
 
@@ -43,7 +43,7 @@ test('multiplication', () => {
 test('division', () => {
   render(<Calculator />)
   userEvent.click(getButton('8'))
-  userEvent.click(getButton('/'))
+  userEvent.click(getButton('Divide'))
   userEvent.click(getButton('4'))
   userEvent.click(getButton('='))
 
