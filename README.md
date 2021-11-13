@@ -30,6 +30,7 @@ Users should be able to:
 ### Screenshot
 
 ![3 different coloured and different sized calculator apps](./screenshot.png)
+Photo by <a href="https://unsplash.com/@jrkorpa?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Jr Korpa</a> on <a href="https://unsplash.com/s/photos/abstract-background?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 
 ### Links
 
