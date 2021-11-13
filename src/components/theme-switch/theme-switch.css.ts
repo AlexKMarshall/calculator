@@ -53,6 +53,7 @@ export const visualSwitch = style({
   backgroundColor: colorThemeTokens.background.keypad,
   borderRadius: themeTokens.borderRadius.pill,
   position: 'relative',
+  overflow: 'hidden',
 
   vars: {
     [sliderHeight]: themeTokens.space.xl,
