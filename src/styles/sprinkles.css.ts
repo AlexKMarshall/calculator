@@ -15,6 +15,10 @@ const properties = defineProperties({
     textTransform: ['uppercase'],
     backgroundColor: colorThemeTokens.background,
     borderRadius: themeTokens.borderRadius,
+    justifyContent: ['flex-start', 'flex-end', 'space-between'],
+    alignItems: ['stretch', 'flex-start', 'flex-end', 'center', 'baseline'],
+    flexWrap: ['wrap', 'nowrap', 'wrap-reverse'],
+    letterSpacing: themeTokens.letterSpacing,
   },
 })
 

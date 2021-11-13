@@ -28,6 +28,9 @@ export const themeTokens = createGlobalTheme(':root', {
     s: '1rem',
     m: '2rem',
   },
+  letterSpacing: {
+    wide: '0.2em',
+  },
 })
 
 export const colorThemeTokens = createThemeContract({
