@@ -11,6 +11,8 @@ globalStyle('body', {
   backgroundColor: colorThemeTokens.background.body,
   fontSize: themeTokens.fontSize.s,
   color: colorThemeTokens.text.body,
+  transitionDuration: themeTokens.transition.duration,
+  transitionProperty: themeTokens.transition.property,
 
   '@media': {
     [resolveScreenMQ.s]: {

@@ -31,6 +31,10 @@ export const themeTokens = createGlobalTheme(':root', {
   letterSpacing: {
     wide: '0.2em',
   },
+  transition: {
+    duration: '200ms',
+    property: 'background-color, color, transform, opacity',
+  },
 })
 
 export const colorThemeTokens = createThemeContract({

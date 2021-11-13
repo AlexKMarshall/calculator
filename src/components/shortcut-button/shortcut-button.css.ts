@@ -27,8 +27,8 @@ const base = style({
   color: colorVars.color,
   borderColor: colorVars.borderColor,
   overflow: 'hidden',
-  transitionDuration: '150ms',
-  transitionProperty: 'filter',
+  transitionDuration: themeTokens.transition.duration,
+  transitionProperty: `${themeTokens.transition.property}, filter`,
   outlineOffset: '2px',
 
   vars: {
@@ -65,8 +65,8 @@ export const inner = style({
   lineHeight: 1,
   backgroundColor: colorVars.backgroundColor,
   borderRadius: themeTokens.borderRadius.s,
-  transitionDuration: '150ms',
-  transitionProperty: 'transform',
+  transitionDuration: themeTokens.transition.duration,
+  transitionProperty: `${themeTokens.transition.property}, transform`,
 
   selectors: {
     [`${base}:active &, ${base}.active &`]: {
